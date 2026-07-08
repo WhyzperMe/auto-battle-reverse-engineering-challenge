@@ -47,7 +47,7 @@ A practical workflow is:
 4. Observe changes to health values during combat.
 5. Use Ghidra to inspect combat-related functions.
 6. Identify the fields responsible for health, max health, and damage.
-7. Patch the values at runtime.
+7. Patch the values at runtime or hard-patch the executable.
 8. Resume execution and verify the result.
 
 ## 5. Static Analysis with Ghidra
@@ -105,9 +105,9 @@ Because the program is compiled as C++, exact object layout can depend on compil
 
 For that reason, do not rely blindly on hardcoded offsets. Confirm all fields dynamically in the debugger.
 
-## 8. Runtime Patching
+## 8. Runtime Patching (Memory)
 
-Once the relevant fields are identified, patch the values in memory.
+Once the relevant fields are identified, patch the values in memory while the program is running.
 
 Example target values:
 
@@ -119,9 +119,34 @@ Example target values:
 
 After patching, resume execution.
 
-If the correct fields were modified, the hero should survive enemy attacks and defeat all enemies.
+If the correct fields were modified, the hero should survive enemy attacks and defeat all enemies. Note that this only lasts until the program is closed.
 
-## 9. Verification
+## 9. Persistent Patching (Hard Patching ASM Values)
+
+If you want the modifications to persist permanently without needing to re-patch the memory every time, you can modify the actual assembly instructions in the executable file using `x64dbg`.
+
+Because this is a Debug build, the compiler initializes the `Hero` struct on the stack using immediate values in the assembly code (e.g., `100` is `0x64` in hex, and `8` is `0x08`).
+
+Steps to create a hard-patched executable:
+
+1. Open the executable in `x64dbg` and set a breakpoint at `main` or the `Hero` constructor.
+2. Step through the initialization code until you reach the instructions that set up the `CombatStats` struct.
+3. Look for assembly instructions writing immediate values to the stack or registers, such as:
+   - `mov dword ptr [rbp+...], 64` (Sets Health to 100)
+   - `mov dword ptr [rbp+...], 8`  (Sets Damage to 8)
+4. Right-click the instruction and select **Assemble** (or press `Ctrl + A`).
+5. Change the immediate value in the instruction:
+   - For Health: Change `64` to `270F` (which is `9999` in hex).
+   - For Damage: Change `8` to `64` (which is `100` in hex) or `270F`.
+6. `x64dbg` will automatically adjust the instruction length and pad the remaining bytes with `NOP` instructions to prevent breaking the code flow.
+7. Repeat this process for the `Max Health` initialization.
+8. Once all desired ASM instructions are modified, open the **Patches** window (`Ctrl + P` or `File` > `Patches`).
+9. Verify your changes in the list and click **Patch File**.
+10. Save the new executable (e.g., as `auto_battle_patched.exe`). 
+
+When you run this newly generated executable, the hero will start with the modified stats by default.
+
+## 10. Verification
 
 A successful solution should show:
 
@@ -132,7 +157,7 @@ A successful solution should show:
 
 Verification should be done through both runtime behavior and memory inspection.
 
-## 10. Lessons Learned
+## 11. Lessons Learned
 
 This challenge demonstrates several basic reverse-engineering concepts:
 
@@ -143,7 +168,7 @@ This challenge demonstrates several basic reverse-engineering concepts:
 - Debug builds are easier to analyze than optimized release builds.
 - Runtime patching should be performed only in software you own or are authorized to analyze.
 
-## 11. Limitations
+## 12. Limitations
 
 This is a toy challenge, not a real game security system.
 
@@ -158,7 +183,7 @@ It intentionally avoids:
 
 The purpose is to teach basic analysis workflow, not to simulate a hardened commercial target.
 
-## 12. Responsible Use
+## 13. Responsible Use
 
 This write-up applies only to this educational program.
 
