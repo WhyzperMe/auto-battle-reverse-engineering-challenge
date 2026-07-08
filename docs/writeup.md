@@ -163,4 +163,3 @@ The purpose is to teach basic analysis workflow, not to simulate a hardened comm
 This write-up applies only to this educational program.
 
 **Do not** use these techniques to cheat in online games, bypass protections, or modify software without permission.
-```
