@@ -1,106 +1,76 @@
-\# Auto-Battle Reverse Engineering Challenge
+# Auto-Battle Reverse Engineering Challenge
 
+A small C++ x64 reverse-engineering challenge for practicing static analysis, runtime memory inspection, and controlled memory patching in a self-contained training program.
 
+The project simulates a simple auto-battle scenario. By default, the hero is intentionally underpowered and loses the fight. The goal is to analyze the program, identify the relevant runtime combat values, and modify them during execution so the hero can win.
 
-A small C++ x64 reverse-engineering challenge for practicing runtime memory analysis, static analysis with Ghidra, and dynamic debugging with x64dbg.
+## Purpose
 
+This repository is intended as an educational reverse-engineering lab.
 
+It demonstrates:
 
-\## Overview
+- How simple C++ objects can appear in memory
+- How runtime values such as health and damage can be located
+- How dynamic analysis with x64dbg complements static analysis with Ghidra
+- How string references and memory layout can help during analysis
+- How controlled patching can change program behavior in a toy environment
 
+## Tools
 
+Recommended tools:
 
-This project contains a simple auto-battle simulation.  
+- Visual Studio
+- x64dbg
+- Ghidra
+- Windows x64 Debug build
 
-By default, the hero is underpowered and loses the fight.
+## Build Instructions
 
+1. Open the project in Visual Studio.
+2. Select the `x64` platform.
+3. Select the `Debug` configuration.
+4. Make sure compiler optimizations are disabled.
+5. Build and run the project.
 
+The project is designed for a Windows console environment.
 
-The goal is to analyze the program, identify the relevant runtime combat fields, patch the hero's values in memory, and make the hero win.
+## Controls
 
+During the simulation:
 
+| Key | Action |
+|---|---|
+| `SPACE` | Print the current battle status |
+| `H` | Reveal the next reverse-engineering hint |
+| `ESC` | Exit the simulation |
 
-\## Learning Goals
+## Challenge Objective
 
+Run the program normally and observe the battle.
 
+The hero will lose by default. Your task is to:
 
-\- Understand how C++ objects appear in memory
+1. Analyze the binary.
+2. Locate the hero object or its relevant combat fields.
+3. Identify the health, max health, and damage values.
+4. Patch the values at runtime.
+5. Resume execution and confirm that the hero wins.
 
-\- Locate strings and nearby object fields in a running process
+The program includes a progressive hint system. The most specific hints are intentionally hidden at startup and must be revealed manually.
 
-\- Use x64dbg for dynamic memory analysis
+## Repository Structure
 
-\- Use Ghidra for static analysis and cross-reference inspection
-
-\- Understand how health and damage values are read and written at runtime
-
-
-
-\## Tools Used
-
-
-
-\- Visual Studio
-
-\- x64dbg
-
-\- Ghidra
-
-\- Windows x64 Debug build
-
-
-
-\## Build Instructions
-
-
-
-1\. Open the solution in Visual Studio.
-
-2\. Select `x64` and `Debug`.
-
-3\. Disable compiler optimizations if they are enabled.
-
-4\. Build and run the project.
-
-
-
-\## Controls
-
-
-
-\- `SPACE` - Print current battle status
-
-\- `H` - Reveal the next reverse-engineering hint
-
-\- `ESC` - Exit the simulation
-
-
-
-\## Challenge Rules
-
-
-
-Try to solve the challenge without revealing all hints immediately.  
-
-The most specific hints are intentionally hidden behind the hint system.
-
-
-
-\## Full Write-up
-
-
-
-See \[`docs/writeup.md`](docs/writeup.md).
-
-
-
-\## Disclaimer
-
-
-
-This project is an educational reverse-engineering lab using a self-contained toy program.
-
-
-
-It is not intended for cheating in commercial games, bypassing anti-cheat systems, or modifying third-party software without permission.
-
+```text
+auto-battle-reverse-engineering-challenge/
+├─ docs/
+│  └─ writeup.md
+├─ src/
+│  └─ main.cpp
+├─ .gitignore
+├─ LICENSE.md
+├─ README.md
+├─ SECURITY.md
+├─ auto-battle-reverse-engineering-challenge.slnx
+├─ auto-battle-reverse-engineering-challenge.vcxproj
+└─ auto-battle-reverse-engineering-challenge.vcxproj.filters
