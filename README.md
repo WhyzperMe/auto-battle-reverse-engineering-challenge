@@ -65,6 +65,7 @@ The program includes a progressive hint system. The most specific hints are inte
 auto-battle-reverse-engineering-challenge/
 ├─ docs/
 │  └─ writeup.md
+|  └─ hardstuck.md
 ├─ src/
 │  └─ main.cpp
 ├─ .gitignore
